@@ -1,0 +1,14 @@
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\bin\Debug\keylogger.exe.config
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\bin\Debug\keylogger.exe
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\bin\Debug\keylogger.pdb
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\obj\Debug\keylogger.csproj.AssemblyReference.cache
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\obj\Debug\keylogger.csproj.CoreCompileInputs.cache
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\obj\Debug\keylogger.exe
+D:\skola\pvbps\cv2-keylogger\keylogger\keylogger\obj\Debug\keylogger.pdb
+D:\skola\pvbps\cv2-keylogger\keylogger\bin\Debug\keylogger.exe.config
+D:\skola\pvbps\cv2-keylogger\keylogger\bin\Debug\keylogger.exe
+D:\skola\pvbps\cv2-keylogger\keylogger\bin\Debug\keylogger.pdb
+D:\skola\pvbps\cv2-keylogger\keylogger\obj\Debug\keylogger.csproj.AssemblyReference.cache
+D:\skola\pvbps\cv2-keylogger\keylogger\obj\Debug\keylogger.csproj.CoreCompileInputs.cache
+D:\skola\pvbps\cv2-keylogger\keylogger\obj\Debug\keylogger.exe
+D:\skola\pvbps\cv2-keylogger\keylogger\obj\Debug\keylogger.pdb
